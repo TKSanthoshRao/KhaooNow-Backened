@@ -1,23 +1,14 @@
 package com.food.khaaonow.dto;
-
-import com.food.khaaonow.model.address.Country;
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
 
 @Getter
 @Setter
-
 public class RestaurantRequest {
 
     @NotBlank
@@ -38,23 +29,17 @@ public class RestaurantRequest {
     @NotBlank
     private String zipcode;
 
-    @NotBlank
+    @NotNull
     private BigDecimal latitude;
 
-    @NotBlank
+    @NotNull
     private BigDecimal longitude;
 
-    @NotBlank
+    @NotNull
     private LocalTime openingTime;
 
-    @NotBlank
+    @NotNull
     private LocalTime closingTime;
 
-    @NotBlank
-    private String ownerName;
-
-    @Email
-    @NotBlank
-    private String ownerEmail;
 
 }

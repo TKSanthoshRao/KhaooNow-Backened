@@ -23,19 +23,18 @@ public class RestaurantController {
         this.restaurantService = restaurantService;
     }
 
-    @PostMapping("/restaurant")
-    public ResponseEntity<?> createRestaurant(@Valid @RequestBody RestaurantRequest restaurantRequest) {
-        return new ResponseEntity<>(restaurantService.createRestaurant(restaurantRequest), HttpStatus.CREATED);
-    }
-
     @GetMapping
     public ResponseEntity<List<RestaurantDTO>> getRestaurantsByLatitudeAndLongitude(
             @RequestParam BigDecimal lat,
             @RequestParam BigDecimal lng,
-            @RequestParam(defaultValue = "5") double radius
+            @RequestParam(defaultValue = "6371") double radius
     ) {
         return ResponseEntity.ok(
                 restaurantService.getNearbyRestaurants(lat, lng, radius)
         );
     }
+
+
+
+
 }

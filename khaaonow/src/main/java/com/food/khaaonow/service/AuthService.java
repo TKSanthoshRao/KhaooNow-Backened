@@ -6,6 +6,7 @@ import com.food.khaaonow.model.user.User;
 import com.food.khaaonow.repo.EmailVerificationTokenRepo;
 import com.food.khaaonow.repo.RolesRepo;
 import com.food.khaaonow.repo.UserRepo;
+import jakarta.annotation.Nullable;
 import org.springframework.mail.MailException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +21,8 @@ import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+
+import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 
 @Service
 public class AuthService {
@@ -66,6 +69,15 @@ public class AuthService {
 
     public void logoutUser() {
 
+    }
+
+    public @Nullable User getCurrentUser() {
+        String loggedInUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = null;
+        if (loggedInUserEmail != null){
+            user = userService.findUserByEmail(loggedInUserEmail);
+        }
+        return user;
     }
 
 }

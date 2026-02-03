@@ -1,8 +1,10 @@
 package com.food.khaaonow.service;
 
 import com.food.khaaonow.dto.RestaurantDTO;
-import com.food.khaaonow.dto.RestaurantRequest;
+import com.food.khaaonow.model.RestaurantOnboardingRequest;
+import com.food.khaaonow.model.RestaurantOnboardingStatus;
 import com.food.khaaonow.model.address.Address;
+
 import com.food.khaaonow.model.address.Country;
 import com.food.khaaonow.model.address.RestaurantAddress;
 import com.food.khaaonow.model.restaurant.Restaurant;
@@ -83,39 +85,9 @@ public class RestaurantService {
                 .setScale(2, RoundingMode.HALF_UP);
     }
 
-    @Transactional
-    public String createRestaurant(@Valid RestaurantRequest restaurantRequest) {
-        Country country = new Country();
-        country.setName(restaurantRequest.getCountry());
-        country.setCode(restaurantRequest.getCountry().substring(0,3));
-        country.setActive(true);
-        Country RestaurantCountry = countryService.saveOrUpdateCountry(country);
 
-        Address address = new Address();
-        address.setLatitude(restaurantRequest.getLatitude());
-        address.setLongitude(restaurantRequest.getLongitude());
-        address.setCity(restaurantRequest.getCity());
-        address.setState(restaurantRequest.getState());
-        address.setActive(true);
-        address.setZipcode(restaurantRequest.getZipcode());
-        address.setCountry(RestaurantCountry);
-        Address address1 = addressService.createAddress(address);
+//    public Restaurant CheckForApprovalAndCreateRestaurant(RestaurantOnboardingRequest restaurantOnboardingRequest) {
+//
+//    }
 
-        RestaurantAddress restaurantAddress = new RestaurantAddress();
-        restaurantAddress.setAddress(address1);
-        RestaurantAddress restaurantAddress1 = restaurantAddressRepo.save(restaurantAddress);
-
-        Restaurant restaurant = new Restaurant();
-        restaurant.setActive(true);
-        restaurant.setName(restaurantRequest.getRestaurantName());
-        restaurant.setAddress(restaurantAddress1);
-        restaurant.setActive(true);
-        restaurant.setClosingTime(restaurantRequest.getClosingTime());
-        restaurant.setOpeningTime(restaurantRequest.getOpeningTime());
-        restaurant.setStatus(RestaurantStatus.OPEN);
-
-        restaurantRepo.save(restaurant);
-        return "success";
-
-    }
 }
