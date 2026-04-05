@@ -31,7 +31,7 @@ public class AdminController {
     @PostMapping("restaurant/onboard-request/{id}/action")
 //    @PreAuthorize("hasRole(ADMIN)")
     public ResponseEntity<?> ActionRestaurantOnboardingRequest(@PathVariable Long id) {
-       restaurantOnboardingService.approveRequest(id);
+        restaurantOnboardingService.approveRequest(id);
         return ResponseEntity.ok("Approved Successfully");
     }
 }

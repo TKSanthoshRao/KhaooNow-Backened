@@ -50,7 +50,7 @@ public class RestaurantService {
             BigDecimal distance = calculateDistance(usrLat,usrLng,address.getLatitude(),address.getLongitude());
 
             if(distance.doubleValue()<= radius){
-                return new RestaurantDTO(restaurant.getId(),restaurant.getName(),distance,isOpen(restaurant.getStatus()));
+                return new RestaurantDTO(restaurant.getId(),restaurant.getName(),distance,isOpen(restaurant.getStatus()),restaurant.getAddress().getAddress().getState(),restaurant.getAddress().getAddress().getStreet(),restaurant.getAddress().getAddress().getCity());
             }
 
             return null;

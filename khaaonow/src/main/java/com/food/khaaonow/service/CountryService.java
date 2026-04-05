@@ -13,6 +13,10 @@ public class CountryService {
     }
 
     public Country saveOrUpdateCountry(Country country) {
+        Country preExistedCountry = countryRepo.findByCode(country.getCode());
+        if (preExistedCountry != null) {
+            return countryRepo.save(preExistedCountry);
+        }
         return countryRepo.save(country);
     }
 }

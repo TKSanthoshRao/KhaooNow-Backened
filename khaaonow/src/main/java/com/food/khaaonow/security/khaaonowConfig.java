@@ -43,13 +43,15 @@ public class khaaonowConfig {
         return http.
                     csrf(customizer -> customizer.disable())
                 .cors(Customizer.withDefaults())
-                            .formLogin(Customizer.withDefaults())
+                            .formLogin(form -> form.disable())
                             .authorizeHttpRequests(request ->
-                                            request.requestMatchers("/api/v1/auth/**").permitAll()
+                                            request.requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                                                    .requestMatchers("/api/v1/auth/**").permitAll()
+                                                    .requestMatchers("/api/v1/restaurants").permitAll()
                                                     .requestMatchers("/actuator/**").permitAll()
                                                     .anyRequest().authenticated())
 
-                .httpBasic(Customizer.withDefaults())
+                .httpBasic(httpBasic -> httpBasic.disable())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
@@ -68,13 +70,21 @@ public class khaaonowConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173/"));
+
+        configuration.setAllowedOrigins(List.of("*"));
+
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        //configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
         source.registerCorsConfiguration("/**", configuration);
+
         return source;
     }
 }

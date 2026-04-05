@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.food.khaaonow.dto.RestaurantRequest;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/restaurant-onboarding")
 public class RestaurantOnboardingController {
@@ -23,7 +25,7 @@ public class RestaurantOnboardingController {
 
     @PostMapping("/request")
     public ResponseEntity<?> requestOnboarding(@Valid @RequestBody RestaurantRequest restaurantRequest) {
-        onboardingService.createRestaurantOnBoardingRequest(restaurantRequest);
+            onboardingService.createRestaurantOnBoardingRequest(restaurantRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("Restaurant onboarding request submitted");
     }

@@ -12,4 +12,7 @@ public class RestaurantDTO {
     private String name;
     private BigDecimal distance;
     private Boolean open;
+    private String state;
+    private String street;
+    private String city;
 }

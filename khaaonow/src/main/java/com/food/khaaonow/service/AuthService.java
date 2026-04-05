@@ -68,7 +68,6 @@ public class AuthService {
     }
 
     public void logoutUser() {
-
     }
 
     public @Nullable User getCurrentUser() {

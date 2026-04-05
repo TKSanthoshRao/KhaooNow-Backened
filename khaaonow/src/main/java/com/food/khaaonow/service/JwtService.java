@@ -19,7 +19,7 @@ public class JwtService {
     private static final String SECRET_KEY =
             "c3VwZXJzZWNyZXRrZXlmb3Jqd3RhdXRoZW50aWNhdGlvbg==";
 
-    private static final long EXPIRATION_TIME = 1000L * 60 * 3; // 3 minutes
+    private static final long EXPIRATION_TIME = 1000L * 60 * 20; // 3 minutes
 
     /* ===================== TOKEN GENERATION ===================== */
 

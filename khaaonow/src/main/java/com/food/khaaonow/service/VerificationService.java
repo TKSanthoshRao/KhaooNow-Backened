@@ -53,7 +53,7 @@ public class VerificationService {
                 emailVerificationTokenAfterCreation.setTokenStatus(TokenStatus.FAILED);
                 emailVerificationTokenRepo.save(emailVerificationTokenAfterCreation);
                 EmailTokenStatus emailTokenStatus = new EmailTokenStatus();
-                emailTokenStatus.setStatus("sent Failed");
+                emailTokenStatus.setStatus("sent Failed"+mailException.getMessage());
                 return emailTokenStatus;
             }
             emailVerificationTokenAfterCreation.setTokenStatus(TokenStatus.SENT);
