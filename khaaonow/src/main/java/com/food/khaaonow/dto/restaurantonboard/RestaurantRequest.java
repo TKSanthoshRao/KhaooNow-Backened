@@ -1,4 +1,4 @@
-package com.food.khaaonow.dto;
+package com.food.khaaonow.dto.restaurantonboard;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

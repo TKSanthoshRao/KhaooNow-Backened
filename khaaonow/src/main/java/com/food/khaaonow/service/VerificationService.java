@@ -1,14 +1,12 @@
 package com.food.khaaonow.service;
 
-import com.food.khaaonow.dto.EmailRequest;
-import com.food.khaaonow.dto.EmailTokenStatus;
-import com.food.khaaonow.dto.TokenVerificationRequest;
-import com.food.khaaonow.dto.VerificationStatus;
+import com.food.khaaonow.dto.email.EmailRequest;
+import com.food.khaaonow.dto.otp.EmailTokenStatus;
+import com.food.khaaonow.dto.otp.TokenVerificationRequest;
+import com.food.khaaonow.dto.otp.VerificationStatus;
 import com.food.khaaonow.model.otp.EmailVerificationToken;
 import com.food.khaaonow.model.otp.TokenStatus;
 import com.food.khaaonow.repo.EmailVerificationTokenRepo;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

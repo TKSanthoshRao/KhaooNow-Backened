@@ -1,18 +1,18 @@
-package com.food.khaaonow.dto;
+package com.food.khaaonow.dto.restaurant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 @Getter
 @Setter
 @AllArgsConstructor
 public class RestaurantDTO {
     private Long id;
     private String name;
-    private BigDecimal distance;
+    private Double distance;
     private Boolean open;
     private String state;
     private String street;
     private String city;
+    private String RestaurantImage;
 }

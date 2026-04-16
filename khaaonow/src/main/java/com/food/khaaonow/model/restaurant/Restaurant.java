@@ -49,4 +49,7 @@ public class Restaurant {
     @JoinColumn(name = "restaurant_address_id", nullable = false, unique = true)
     private RestaurantAddress address;
 
+    @Column
+    private String restaurantImage;
+
 }

@@ -1,7 +1,7 @@
 package com.food.khaaonow.controller;
 
 
-import com.food.khaaonow.dto.RestaurantDTO;
+import com.food.khaaonow.dto.restaurant.RestaurantDTO;
 import com.food.khaaonow.service.RestaurantService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+//@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/v1/restaurants")
 public class RestaurantController {
@@ -29,8 +30,4 @@ public class RestaurantController {
                 restaurantService.getNearbyRestaurants(lat, lng, radius)
         );
     }
-
-
-
-
 }

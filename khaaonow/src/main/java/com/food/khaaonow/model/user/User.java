@@ -69,6 +69,9 @@ public class User {
     @Column(nullable = false)
     private Boolean isEmailVerified;
 
+    @Column
+    private String userImageUrl;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();

@@ -1,8 +1,14 @@
 package com.food.khaaonow.controller;
 
-import com.food.khaaonow.dto.*;
+import com.food.khaaonow.dto.email.EmailRequest;
+import com.food.khaaonow.dto.otp.EmailTokenStatus;
+import com.food.khaaonow.dto.jwt.JwtResponse;
+import com.food.khaaonow.dto.login.LoginRequest;
+import com.food.khaaonow.dto.otp.TokenVerificationRequest;
+import com.food.khaaonow.dto.otp.VerificationStatus;
+import com.food.khaaonow.dto.signup.SignUpRequest;
+import com.food.khaaonow.dto.user.BasicUserDetailsDTO;
 import com.food.khaaonow.service.AuthService;
-import com.food.khaaonow.service.EmailService;
 import com.food.khaaonow.service.VerificationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -48,5 +54,10 @@ public class AuthController {
     public ResponseEntity<Void> logout(){
         authService.logoutUser();
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/loggedin/user")
+    public ResponseEntity<BasicUserDetailsDTO> loggedinUser(){
+        return new ResponseEntity<>(authService.getLoggedInUserUser(),HttpStatus.OK);
     }
 }

@@ -25,6 +25,10 @@ public class FoodItem {
     @Column(nullable = false)
     private Boolean available;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private FoodType foodType;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id",nullable = false)
     private Restaurant restaurant;
@@ -35,7 +39,11 @@ public class FoodItem {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(nullable = false)
     private Boolean active;
+
+    @Column
+    private String foodItemImageUrl;
 
     @PrePersist
     protected void onCreate() {

@@ -1,15 +1,20 @@
 package com.food.khaaonow.model.cart;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.food.khaaonow.model.order.OrderStatus;
 import com.food.khaaonow.model.restaurant.Restaurant;
 import com.food.khaaonow.model.user.User;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Getter
+@Setter
 public class Cart {
 
     @Id
@@ -17,6 +22,7 @@ public class Cart {
     private Long id;
 
     @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonManagedReference
     private Set<CartItem> cartItems = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
@@ -36,6 +42,11 @@ public class Cart {
         if(this.cartStatus == null) {
             this.cartStatus = CartStatus.ACTIVE;
         }
+    }
+
+    public void addCartItem(CartItem item) {
+        cartItems.add(item);
+        item.setCart(this);
     }
 
 }

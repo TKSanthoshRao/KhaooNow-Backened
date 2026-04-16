@@ -27,6 +27,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Autowired
     MyUserDetailsService myUserDetailsService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         System.out.println("JWT filter executing");

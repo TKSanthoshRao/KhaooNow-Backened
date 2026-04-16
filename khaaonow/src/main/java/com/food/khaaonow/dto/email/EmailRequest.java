@@ -1,4 +1,4 @@
-package com.food.khaaonow.dto;
+package com.food.khaaonow.dto.email;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

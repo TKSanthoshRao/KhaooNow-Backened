@@ -1,4 +1,5 @@
-package com.food.khaaonow.dto;
+package com.food.khaaonow.dto.otp;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -6,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class VerificationStatus {
+public class EmailTokenStatus {
     private String status;
 }

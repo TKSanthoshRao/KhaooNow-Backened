@@ -1,5 +1,6 @@
 package com.food.khaaonow.model.cart;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.food.khaaonow.model.restaurant.FoodItem;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class CartItem {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "cart_id", nullable = false)
+    @JsonBackReference
     private Cart cart;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

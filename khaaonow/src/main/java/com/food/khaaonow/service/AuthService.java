@@ -1,28 +1,22 @@
 package com.food.khaaonow.service;
 
-import com.food.khaaonow.dto.*;
-import com.food.khaaonow.model.otp.EmailVerificationToken;
+import com.food.khaaonow.dto.jwt.JwtResponse;
+import com.food.khaaonow.dto.login.LoginRequest;
+import com.food.khaaonow.dto.signup.SignUpRequest;
+import com.food.khaaonow.dto.user.BasicUserDetailsDTO;
 import com.food.khaaonow.model.user.User;
-import com.food.khaaonow.repo.EmailVerificationTokenRepo;
 import com.food.khaaonow.repo.RolesRepo;
-import com.food.khaaonow.repo.UserRepo;
 import jakarta.annotation.Nullable;
-import org.springframework.mail.MailException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.SecureRandom;
-import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
-
-import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 
 @Service
 public class AuthService {
@@ -62,7 +56,7 @@ public class AuthService {
         Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         if(auth.isAuthenticated() && auth.getPrincipal() instanceof UserDetails userDetails){
             String jwtToken = jwtService.generateToken(userDetails);
-            return new JwtResponse(jwtToken,"Bearer",180L);
+            return new JwtResponse(jwtToken,"Bearer",10L);
         }
         return null;
     }
@@ -70,13 +64,26 @@ public class AuthService {
     public void logoutUser() {
     }
 
-    public @Nullable User getCurrentUser() {
-        String loggedInUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = null;
-        if (loggedInUserEmail != null){
-            user = userService.findUserByEmail(loggedInUserEmail);
-        }
-        return user;
+//    @PreAuthorize("hasRole('ADMIN')")
+    public User getCurrentUser() {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+        assert authentication != null;
+        UserPrinciple userPrinciple =
+                (UserPrinciple) authentication.getPrincipal();
+        assert userPrinciple != null;
+        return userPrinciple.getUser();
+    }
+
+    public BasicUserDetailsDTO getLoggedInUserUser() {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+        assert authentication != null;
+        UserPrinciple userPrinciple =
+                (UserPrinciple) authentication.getPrincipal();
+        assert userPrinciple != null;
+        User user =  userPrinciple.getUser();
+        return new BasicUserDetailsDTO(user.getFullName(),user.getEmail(),"https://photos.airmail.news/jxwdcgbj07pdyi1tekti725l32s4-4ac75b603d1c17e5a9afaa413ba0920e.jpg",user.getIsEmailVerified());
     }
 
 }

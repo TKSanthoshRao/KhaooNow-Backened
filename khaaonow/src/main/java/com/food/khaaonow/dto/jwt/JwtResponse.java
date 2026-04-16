@@ -1,4 +1,4 @@
-package com.food.khaaonow.dto;
+package com.food.khaaonow.dto.jwt;
 
 import lombok.*;
 

@@ -3,6 +3,7 @@ package com.food.khaaonow.service;
 import com.food.khaaonow.model.auth.Role;
 import com.food.khaaonow.model.user.User;
 import com.food.khaaonow.model.user.UserStatus;
+import lombok.Getter;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,9 +14,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Getter
 public class UserPrinciple implements UserDetails {
 
     private User user;
+    private Long id;
     public UserPrinciple(User user) {
         this.user = user;
     }
@@ -59,4 +62,5 @@ public class UserPrinciple implements UserDetails {
     public boolean isEnabled() {
         return user.getStatus() == UserStatus.ACTIVE;
     }
+
 }

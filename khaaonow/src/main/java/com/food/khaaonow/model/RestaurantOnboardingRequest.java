@@ -11,7 +11,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
 @Entity
 @Table(
         name = "restaurant_onboarding_requests",
@@ -41,12 +40,21 @@ public class RestaurantOnboardingRequest {
     @Column(nullable = false)
     private RestaurantOnboardingStatus restaurantOnboardingStatus;
 
-
     @Column(nullable = false)
     private LocalTime OpeningTime;
 
     @Column(nullable = false)
     private LocalTime ClosingTime;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reviewer_id")
+    private User reviewer;
+
+    @Column
+    private LocalDateTime reviewedAt;
+
+    @Column
+    private String rejectionReason;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp

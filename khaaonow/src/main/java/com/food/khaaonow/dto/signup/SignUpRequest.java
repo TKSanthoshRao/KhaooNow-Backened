@@ -1,4 +1,4 @@
-package com.food.khaaonow.dto;
+package com.food.khaaonow.dto.signup;
 
 
 import jakarta.validation.constraints.Email;

@@ -1,23 +1,25 @@
 package com.food.khaaonow.service;
 
-import com.food.khaaonow.dto.RestaurantRequest;
+import com.food.khaaonow.dto.restaurantonboard.OnboardingRequestRejection;
+import com.food.khaaonow.dto.restaurantonboard.RestaurantRequest;
 import com.food.khaaonow.model.AddressSnapshot;
 import com.food.khaaonow.model.RestaurantOnboardingRequest;
 import com.food.khaaonow.model.RestaurantOnboardingStatus;
 import com.food.khaaonow.model.address.Address;
 import com.food.khaaonow.model.address.Country;
 import com.food.khaaonow.model.address.RestaurantAddress;
+import com.food.khaaonow.model.auth.Role;
 import com.food.khaaonow.model.restaurant.Restaurant;
 import com.food.khaaonow.model.restaurant.RestaurantStatus;
 import com.food.khaaonow.model.user.User;
-import com.food.khaaonow.repo.EmailVerificationTokenRepo;
-import com.food.khaaonow.repo.RestaurantAddressRepo;
-import com.food.khaaonow.repo.RestaurantOnboardingRepo;
-import com.food.khaaonow.repo.RestaurantRepo;
+import com.food.khaaonow.repo.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -30,8 +32,18 @@ public class RestaurantOnboardingService {
     private RestaurantAddressRepo  restaurantAddressRepo;
     private RestaurantRepo restaurantRepo;
     private final RestaurantOnboardingRepo restaurantOnboardingRepo;
+    private final RolesRepo rolesRepo;
+    private final UserService userService;
 
-    public RestaurantOnboardingService(AuthService authService,EmailVerificationTokenRepo emailVerificationTokenRepo,CountryService countryService,AddressService addressService,RestaurantAddressRepo  restaurantAddressRepo,RestaurantRepo  restaurantRepo,RestaurantOnboardingRepo restaurantOnboardingRepo) {
+    public RestaurantOnboardingService(AuthService authService,
+                                       EmailVerificationTokenRepo emailVerificationTokenRepo,
+                                       CountryService countryService,
+                                       AddressService addressService,
+                                       RestaurantAddressRepo  restaurantAddressRepo,
+                                       RestaurantRepo  restaurantRepo,
+                                       RestaurantOnboardingRepo restaurantOnboardingRepo,
+                                       RolesRepo rolesRepo,
+                                       UserService userService) {
         this.authService = authService;
         this.emailVerificationTokenRepo = emailVerificationTokenRepo;
         this.countryService = countryService;
@@ -39,6 +51,8 @@ public class RestaurantOnboardingService {
         this.restaurantAddressRepo = restaurantAddressRepo;
         this.restaurantRepo = restaurantRepo;
         this.restaurantOnboardingRepo = restaurantOnboardingRepo;
+        this.rolesRepo = rolesRepo;
+        this.userService = userService;
     }
 
     @Transactional
@@ -83,7 +97,7 @@ public class RestaurantOnboardingService {
 
     public List<RestaurantOnboardingRequest> getRestaurantRequests() {
 
-        return restaurantOnboardingRepo.findAll();
+        return restaurantOnboardingRepo.findByrestaurantOnboardingStatus(RestaurantOnboardingStatus.REQUESTED);
     }
 
     @Transactional
@@ -119,6 +133,12 @@ public class RestaurantOnboardingService {
             restaurantAddress.setAddress(address1);
             RestaurantAddress restaurantAddress1 = restaurantAddressRepo.save(restaurantAddress);
 
+            User loggeInUser = req.getOwner();
+            Set<Role> roles = new HashSet<>();
+            roles.add(rolesRepo.findByName("ROLE_RESTAURANT_ADMIN"));
+            loggeInUser.setRoles(roles);
+            User owner = userService.save(loggeInUser);
+
             Restaurant restaurant = new Restaurant();
             restaurant.setActive(true);
             restaurant.setName(req.getRestaurantName());
@@ -127,13 +147,39 @@ public class RestaurantOnboardingService {
             restaurant.setClosingTime(req.getClosingTime());
             restaurant.setOpeningTime(req.getOpeningTime());
             restaurant.setStatus(RestaurantStatus.OPEN);
-            restaurant.setOwner(req.getOwner());
+            restaurant.setOwner(owner);
+
+
 
             restaurantRepo.save(restaurant);
 
         req.setRestaurantOnboardingStatus(RestaurantOnboardingStatus.APPROVED);
+        req.setReviewer(authService.getCurrentUser());
+        req.setReviewedAt(LocalDateTime.now());
         restaurantOnboardingRepo.save(req);
     }
 
 
+    public void rejectRequest(Long id, OnboardingRequestRejection onboardingRequestRejection) {
+        RestaurantOnboardingRequest req = restaurantOnboardingRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Request not found"));
+
+        if (req.getRestaurantOnboardingStatus() != RestaurantOnboardingStatus.REQUESTED) {
+            throw new IllegalStateException("Invalid state");
+        }
+        String reason = onboardingRequestRejection.getReason();
+        if(reason == null || reason.trim().isEmpty()){
+            throw new IllegalStateException("Reason must required for rejection");
+        }
+
+        req.setRestaurantOnboardingStatus(RestaurantOnboardingStatus.REJECTED);
+        req.setReviewer(authService.getCurrentUser());
+        req.setReviewedAt(LocalDateTime.now());
+        req.setRejectionReason(onboardingRequestRejection.getReason());
+        restaurantOnboardingRepo.save(req);
+    }
+
+    public RestaurantOnboardingRequest getRestaurantRequestById(Long id) {
+        return restaurantOnboardingRepo.findById(id).get();
+    }
 }
